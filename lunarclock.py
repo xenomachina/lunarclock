@@ -7,7 +7,12 @@
 # ///
 """lunarclock — based on the moon phase posts of Froyo☆Tam"""
 
-X_BUFFER = [
+from rich.console import Console
+
+CONSOLE = Console()
+
+
+BUFFER_1030 = [
     "                          ",
     " XX  XXXX  XX  XXX   XXXX ",
     " XX  XX X  XX    XX  XX X ",
@@ -20,10 +25,39 @@ X_BUFFER = [
     "                          ",
 ]
 
+BUFFER_1159 = [
+    "                          ",
+    " XX    XX  XX  XXXX  XXXX ",
+    " XX    XX  XX  XX    X  X ",
+    " XX    XX      XXX   XXXX ",
+    " XX    XX  XX    XX     X ",
+    " XX    XX  XX  XXX   XXX  ",
+    "                          ",
+    "               XXXX XX X  ",
+    "               X    X X X ",
+    "                          ",
+]
+
+BUFFER_1200 = [
+    "                          ",
+    " XX  XXX   XX  XXXX  XXXX ",
+    " XX    XX  XX  XX X  XX X ",
+    " XX   XXX      XX X  XX X ",
+    " XX  XX    XX  XX X  XX X ",
+    " XX  XXXX  XX  XXXX  XXXX ",
+    "                          ",
+    "               XXX  XX X  ",
+    "               X  X X X X ",
+    "                          ",
+]
+
 PHASES = "🌕🌖🌗🌘🌑🌒🌓🌔"
 
 BITS_TO_PHASE_INDEX = [0, 2, 6, 4]
 
+
+def clear_screen():
+    CONSOLE.clear()
 
 def xs_to_phases(xs: list[str]) -> list[list[int]]:
     result = []
@@ -36,13 +70,14 @@ def xs_to_phases(xs: list[str]) -> list[list[int]]:
         result.append(row)
     return result
 
-
-def main():
-    frame = xs_to_phases(X_BUFFER)
-    for line in frame:
-        print(line)
+def print_frame(frame):
+    clear_screen()
     for line in frame:
         print("".join(PHASES[c] for c in line))
+
+def main():
+    frame = xs_to_phases(BUFFER_1030)
+    print_frame(frame)
 
 
 if __name__ == "__main__":
