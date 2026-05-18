@@ -5,7 +5,12 @@
 #   "rich>=13.7",
 # ]
 # ///
-"""lunarclock — based on the moon phase posts of Froyo☆Tam"""
+"""
+lunarclock — based on the moon phase posts of Froyo☆Tam
+
+In particular, this post:
+https://bsky.app/profile/froyotam.bsky.social/post/3mm45hoc4w22k
+"""
 
 import datetime
 import time
@@ -13,45 +18,6 @@ import time
 from rich.console import Console
 
 CONSOLE = Console()
-
-BUFFER_1030 = [
-    "                          ",
-    " XX  XXXX  XX  XXX   XXXX ",
-    " XX  XX X  XX    XX  XX X ",
-    " XX  XX X      XXX   XX X ",
-    " XX  XX X  XX    XX  XX X ",
-    " XX  XXXX  XX  XXX   XXXX ",
-    "                          ",
-    "               XXXX XX X  ",
-    "               X    X X X ",
-    "                          ",
-]
-
-BUFFER_1159 = [
-    "                          ",
-    " XX    XX  XX  XXXX  XXXX ",
-    " XX    XX  XX  XX    X  X ",
-    " XX    XX      XXX   XXXX ",
-    " XX    XX  XX    XX     X ",
-    " XX    XX  XX  XXX   XXX  ",
-    "                          ",
-    "               XXXX XX X  ",
-    "               X    X X X ",
-    "                          ",
-]
-
-BUFFER_1200 = [
-    "                          ",
-    " XX  XXX   XX  XXXX  XXXX ",
-    " XX    XX  XX  XX X  XX X ",
-    " XX   XXX      XX X  XX X ",
-    " XX  XX    XX  XX X  XX X ",
-    " XX  XXXX  XX  XXXX  XXXX ",
-    "                          ",
-    "               XXX  XX X  ",
-    "               X  X X X X ",
-    "                          ",
-]
 
 PHASES = "🌕🌖🌗🌘🌑🌒🌓🌔"
 
@@ -191,6 +157,14 @@ FONT = {
             " XXX  ",
             "      ",
         ],
+        'p' : [
+            " XXXX XX X  ",
+            " X    X X X ",
+        ],
+        'a' : [
+            " XXX  XX X  ",
+            " X  X X X X ",
+        ],
     }.items()
 }
 
@@ -207,9 +181,9 @@ def advance_frame(frame, next_frame):
                 frame[i][j] = (frame[i][j] + 1) % n
 
 def now() -> str:
-    """Returns time in format HHMMp, where p is "p" or "a"."""
+    """Returns time in format HHMMSSp, where p is "p" or "a"."""
     t = datetime.datetime.now()
-    return t.strftime("%I%M") + ("p" if t.hour >= 12 else "a")
+    return t.strftime("%I%M%S") + ("p" if t.hour >= 12 else "a")
 
 def render_char_to_frame(frame, c):
     glyph = FONT[c]
@@ -224,7 +198,17 @@ def clock_frame():
     render_char_to_frame(frame, ':')
     render_char_to_frame(frame, str(n[2]))
     render_char_to_frame(frame, str(n[3]))
-    # TODO am/pm
+    render_char_to_frame(frame, ':')
+    render_char_to_frame(frame, str(n[4]))
+    render_char_to_frame(frame, str(n[5]))
+
+    ampm = [[] for x in range(len(FONT['a']))]
+    render_char_to_frame(ampm, 'a' if n[-1] == 'a' else 'p')
+
+    padding = [0] * (len(frame[0]) - len(ampm[0]))
+    frame.extend(padding + row for row in ampm)
+    frame.extend([[0] * len(frame[0])])
+
     return frame
 
 
