@@ -7,6 +7,8 @@
 # ///
 """lunarclock — based on the moon phase posts of Froyo☆Tam"""
 
+import time
+
 from rich.console import Console
 
 CONSOLE = Console()
@@ -73,11 +75,23 @@ def xs_to_phases(xs: list[str]) -> list[list[int]]:
 def print_frame(frame):
     clear_screen()
     for line in frame:
-        print("".join(PHASES[c] for c in line))
+        print("".join(PHASES[i] for i in line))
+
+def advance_frame(frame, next_frame):
+    n = len(PHASES)
+    for i in range(len(frame)):
+        for j in range(len(frame[i])):
+            if frame[i][j] != next_frame[i][j]:
+                frame[i][j] = (frame[i][j] + 1) % n
 
 def main():
-    frame = xs_to_phases(BUFFER_1030)
+    frame = xs_to_phases(BUFFER_1159)
     print_frame(frame)
+    next_frame = xs_to_phases(BUFFER_1200)
+    while frame != next_frame:
+        advance_frame(frame, next_frame)
+        print_frame(frame)
+        time.sleep(0.125)
 
 
 if __name__ == "__main__":
