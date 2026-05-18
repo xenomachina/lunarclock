@@ -24,23 +24,25 @@ PHASES = "🌕🌖🌗🌘🌑🌒🌓🌔"
 
 BITS_TO_PHASE_INDEX = [0, 2, 6, 4]
 
+
 def xs_to_phases(xs: list[str]) -> list[list[int]]:
     result = []
     for line in xs:
         row = []
         for i in range(0, len(line), 2):
-            n = 0 if line[i] == ' ' else 2
-            n += 0 if line[i+1] == ' ' else 1
+            n = 0 if line[i] == " " else 2
+            n += 0 if line[i + 1] == " " else 1
             row.append(BITS_TO_PHASE_INDEX[n])
         result.append(row)
     return result
+
 
 def main():
     frame = xs_to_phases(X_BUFFER)
     for line in frame:
         print(line)
     for line in frame:
-        print(''.join(PHASES[c] for c in line))
+        print("".join(PHASES[c] for c in line))
 
 
 if __name__ == "__main__":
