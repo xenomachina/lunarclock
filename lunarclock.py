@@ -21,205 +21,180 @@ CONSOLE = Console()
 
 PHASES = "🌕🌖🌗🌘🌑🌒🌓🌔"
 
-BITS_TO_PHASE_INDEX = [0, 2, 6, 4]
+NEXT_PHASE = {PHASES[i]: PHASES[(i + 1) % len(PHASES)] for i in range(len(PHASES))}
 
-
-def clear_screen() -> None:
-    CONSOLE.clear()
-
-def xs_to_phases(xs: list[str]) -> list[list[int]]:
-    result = []
-    for line in xs:
-        row = []
-        for i in range(0, len(line), 2):
-            n = 0 if line[i] == " " else 2
-            n += 0 if line[i + 1] == " " else 1
-            row.append(BITS_TO_PHASE_INDEX[n])
-        result.append(row)
-    return result
 
 FONT = {
-    k: xs_to_phases(xs) for k, xs in {
-        ' ' : [
-            "    ",
-            "    ",
-            "    ",
-            "    ",
-            "    ",
-            "    ",
-            "    ",
-        ],
-        '|' : [
-            "    ",
-            " XX ",
-            " XX ",
-            " XX ",
-            " XX ",
-            " XX ",
-            "    ",
-        ],
-        ':' : [
-            "    ",
-            " XX ",
-            " XX ",
-            "    ",
-            " XX ",
-            " XX ",
-            "    ",
-        ],
-        '0' : [
-            "      ",
-            " XXXX ",
-            " XX X ",
-            " XX X ",
-            " XX X ",
-            " XXXX ",
-            "      ",
-        ],
-        '1' : [
-            "      ",
-            "   XX ",
-            "  XXX ",
-            "   XX ",
-            "   XX ",
-            "   XX ",
-            "      ",
-        ],
-        '2' : [
-            "      ",
-            " XXX  ",
-            "    X ",
-            "  XX  ",
-            " XX   ",
-            " XXXX ",
-            "      ",
-        ],
-        '3' : [
-            "      ",
-            " XXX  ",
-            "   XX ",
-            " XXX  ",
-            "   XX ",
-            " XXX  ",
-            "      ",
-        ],
-        '4' : [
-            "      ",
-            " XX X ",
-            " XX X ",
-            " XXXX ",
-            "    X ",
-            "    X ",
-            "      ",
-        ],
-        '5' : [
-            "      ",
-            " XXXX ",
-            " XX   ",
-            " XXX  ",
-            "   XX ",
-            " XXX  ",
-            "      ",
-        ],
-        '6' : [
-            "      ",
-            "  XXX ",
-            " XX   ",
-            " XXXX ",
-            " XX X ",
-            "  XXX ",
-            "      ",
-        ],
-        '7' : [
-            "      ",
-            " XXXX ",
-            "   XX ",
-            "  XX  ",
-            " XX   ",
-            " XX   ",
-            "      ",
-        ],
-        '8' : [
-            "      ",
-            "  XX  ",
-            " XX X ",
-            "  XX  ",
-            " XX X ",
-            "  XX  ",
-            "      ",
-        ],
-        '9' : [
-            "      ",
-            "  XXX ",
-            " XX X ",
-            "  XXX ",
-            "    X ",
-            " XXX  ",
-            "      ",
-        ],
-        'p' : [
-            " XXXX XX X  ",
-            " X    X X X ",
-        ],
-        'a' : [
-            " XXX  XX X  ",
-            " X  X X X X ",
-        ],
-    }.items()
+    " ": [
+        "🌕🌕",
+        "🌕🌕",
+        "🌕🌕",
+        "🌕🌕",
+        "🌕🌕",
+    ],
+    "|": [
+        "🌗🌓",
+        "🌗🌓",
+        "🌗🌓",
+        "🌗🌓",
+        "🌗🌓",
+    ],
+    ":": [
+        "🌗🌓",
+        "🌗🌓",
+        "🌕🌕",
+        "🌗🌓",
+        "🌗🌓",
+    ],
+    "0": [
+        "🌗🌑🌓",
+        "🌗🌓🌓",
+        "🌗🌓🌓",
+        "🌗🌓🌓",
+        "🌗🌑🌓",
+    ],
+    "1": [
+        "🌕🌗🌓",
+        "🌕🌑🌓",
+        "🌕🌗🌓",
+        "🌕🌗🌓",
+        "🌕🌗🌓",
+    ],
+    "2": [
+        "🌗🌑🌕",
+        "🌕🌕🌓",
+        "🌕🌑🌕",
+        "🌗🌓🌕",
+        "🌗🌑🌓",
+    ],
+    "3": [
+        "🌗🌑🌕",
+        "🌕🌗🌓",
+        "🌗🌑🌕",
+        "🌕🌗🌓",
+        "🌗🌑🌕",
+    ],
+    "4": [
+        "🌗🌓🌓",
+        "🌗🌓🌓",
+        "🌗🌑🌓",
+        "🌕🌕🌓",
+        "🌕🌕🌓",
+    ],
+    "5": [
+        "🌗🌑🌓",
+        "🌗🌓🌕",
+        "🌗🌑🌕",
+        "🌕🌗🌓",
+        "🌗🌑🌕",
+    ],
+    "6": [
+        "🌕🌑🌓",
+        "🌗🌓🌕",
+        "🌗🌑🌓",
+        "🌗🌓🌓",
+        "🌕🌑🌓",
+    ],
+    "7": [
+        "🌗🌑🌓",
+        "🌕🌗🌓",
+        "🌕🌑🌕",
+        "🌗🌓🌕",
+        "🌗🌓🌕",
+    ],
+    "8": [
+        "🌕🌑🌕",
+        "🌗🌓🌓",
+        "🌕🌑🌕",
+        "🌗🌓🌓",
+        "🌕🌑🌕",
+    ],
+    "9": [
+        "🌕🌑🌓",
+        "🌗🌓🌓",
+        "🌕🌑🌓",
+        "🌕🌕🌓",
+        "🌗🌑🌕",
+    ],
+    "p": [
+        "🌗🌑🌓🌑🌗🌕",
+        "🌗🌕🌕🌓🌓🌓",
+    ],
+    "a": [
+        "🌗🌑🌕🌑🌗🌕",
+        "🌗🌕🌓🌓🌓🌓",
+    ],
 }
 
-def print_frame(frame: list[list[int]]) -> None:
-    clear_screen()
-    for line in frame:
-        print("".join(PHASES[i] for i in line))
 
-def advance_frame(frame: list[list[int]], next_frame: list[list[int]]) -> None:
-    n = len(PHASES)
+def print_frame(frame: list[str]) -> None:
+    CONSOLE.clear()
+    for line in frame:
+        print(line)
+
+
+def advance_frame(frame: list[str], next_frame: list[str]) -> None:
     for i in range(len(frame)):
+        row = ""
         for j in range(len(frame[i])):
-            if frame[i][j] != next_frame[i][j]:
-                frame[i][j] = (frame[i][j] + 1) % n
+            c = frame[i][j]
+            if c != next_frame[i][j]:
+                c = NEXT_PHASE[c]
+            row += c
+        frame[i] = row
+
 
 def now() -> str:
     """Returns time in format HHMMSSp, where p is "p" or "a"."""
     t = datetime.datetime.now()
     return t.strftime("%I%M%S") + ("p" if t.hour >= 12 else "a")
 
-def render_char_to_frame(frame: list[list[int]], c: str) -> None:
+
+def render_glyph(frame: list[str], c: str) -> None:
+    """Renders the specified glyph into the specified frame"""
     glyph = FONT[c]
+    assert len(glyph) == len(frame)
     for i in range(len(frame)):
         frame[i] += glyph[i]
 
-def clock_frame() -> list[list[int]]:
+
+def clock_frame() -> list[str]:
     n = now()
-    frame: list[list[int]] = [[] for x in range(len(FONT[' ']))]
-    render_char_to_frame(frame, '|' if n[0] == '1' else ' ')
-    render_char_to_frame(frame, str(n[1]))
-    render_char_to_frame(frame, ':')
-    render_char_to_frame(frame, str(n[2]))
-    render_char_to_frame(frame, str(n[3]))
-    render_char_to_frame(frame, ':')
-    render_char_to_frame(frame, str(n[4]))
-    render_char_to_frame(frame, str(n[5]))
 
-    ampm: list[list[int]] = [[] for x in range(len(FONT['a']))]
-    render_char_to_frame(ampm, 'a' if n[-1] == 'a' else 'p')
+    blank = PHASES[0]
 
-    padding = [0] * (len(frame[0]) - len(ampm[0]))
+    frame = [""] * len(FONT[" "])
+    render_glyph(frame, "|" if n[0] == "1" else " ")
+    render_glyph(frame, str(n[1]))
+    render_glyph(frame, ":")
+    render_glyph(frame, str(n[2]))
+    render_glyph(frame, str(n[3]))
+    render_glyph(frame, ":")
+    render_glyph(frame, str(n[4]))
+    render_glyph(frame, str(n[5]))
+
+    width = len(frame[0])
+    blank_line = blank * width
+    frame.insert(0, blank_line)
+    frame.append(blank_line)
+
+    ampm = [""] * len(FONT["a"])
+    render_glyph(ampm, "a" if n[-1] == "a" else "p")
+    padding = blank * (width - len(ampm[0]))
     frame.extend(padding + row for row in ampm)
-    frame.extend([[0] * len(frame[0])])
+
+    frame.append(blank_line)
 
     return frame
 
 
 def main() -> None:
     frame = clock_frame()
-    print_frame(frame)
     while True:
+        print_frame(frame)
         time.sleep(0.125)
         next_frame = clock_frame()
         advance_frame(frame, next_frame)
-        print_frame(frame)
 
 
 if __name__ == "__main__":
