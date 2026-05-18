@@ -7,12 +7,12 @@
 # ///
 """lunarclock — based on the moon phase posts of Froyo☆Tam"""
 
+import datetime
 import time
 
 from rich.console import Console
 
 CONSOLE = Console()
-
 
 BUFFER_1030 = [
     "                          ",
@@ -72,6 +72,128 @@ def xs_to_phases(xs: list[str]) -> list[list[int]]:
         result.append(row)
     return result
 
+FONT = {
+    k: xs_to_phases(xs) for k, xs in {
+        ' ' : [
+            "    ",
+            "    ",
+            "    ",
+            "    ",
+            "    ",
+            "    ",
+            "    ",
+        ],
+        '|' : [
+            "    ",
+            " XX ",
+            " XX ",
+            " XX ",
+            " XX ",
+            " XX ",
+            "    ",
+        ],
+        ':' : [
+            "    ",
+            " XX ",
+            " XX ",
+            "    ",
+            " XX ",
+            " XX ",
+            "    ",
+        ],
+        '0' : [
+            "      ",
+            " XXXX ",
+            " XX X ",
+            " XX X ",
+            " XX X ",
+            " XXXX ",
+            "      ",
+        ],
+        '1' : [
+            "      ",
+            "   XX ",
+            "  XXX ",
+            "   XX ",
+            "   XX ",
+            "   XX ",
+            "      ",
+        ],
+        '2' : [
+            "      ",
+            " XXX  ",
+            "    X ",
+            "  XX  ",
+            " XX   ",
+            " XXXX ",
+            "      ",
+        ],
+        '3' : [
+            "      ",
+            " XXX  ",
+            "   XX ",
+            " XXX  ",
+            "   XX ",
+            " XXX  ",
+            "      ",
+        ],
+        '4' : [
+            "      ",
+            " XX X ",
+            " XX X ",
+            " XXXX ",
+            "    X ",
+            "    X ",
+            "      ",
+        ],
+        '5' : [
+            "      ",
+            " XXXX ",
+            " XX   ",
+            " XXX  ",
+            "   XX ",
+            " XXX  ",
+            "      ",
+        ],
+        '6' : [
+            "      ",
+            "  XXX ",
+            " XX   ",
+            " XXXX ",
+            " XX X ",
+            "  XXX ",
+            "      ",
+        ],
+        '7' : [
+            "      ",
+            " XXXX ",
+            "   XX ",
+            "  XX  ",
+            " XX   ",
+            " XX   ",
+            "      ",
+        ],
+        '8' : [
+            "      ",
+            "  XX  ",
+            " XX X ",
+            "  XX  ",
+            " XX X ",
+            "  XX  ",
+            "      ",
+        ],
+        '9' : [
+            "      ",
+            "  XXX ",
+            " XX X ",
+            "  XXX ",
+            "    X ",
+            " XXX  ",
+            "      ",
+        ],
+    }.items()
+}
+
 def print_frame(frame):
     clear_screen()
     for line in frame:
@@ -84,14 +206,36 @@ def advance_frame(frame, next_frame):
             if frame[i][j] != next_frame[i][j]:
                 frame[i][j] = (frame[i][j] + 1) % n
 
+def now() -> str:
+    """Returns time in format HHMMp, where p is "p" or "a"."""
+    t = datetime.datetime.now()
+    return t.strftime("%I%M") + ("p" if t.hour >= 12 else "a")
+
+def render_char_to_frame(frame, c):
+    glyph = FONT[c]
+    for i in range(len(frame)):
+        frame[i] += glyph[i]
+
+def clock_frame():
+    n = now()
+    frame = [[] for x in range(len(FONT[' ']))]
+    render_char_to_frame(frame, '|' if n[0] == '1' else ' ')
+    render_char_to_frame(frame, str(n[1]))
+    render_char_to_frame(frame, ':')
+    render_char_to_frame(frame, str(n[2]))
+    render_char_to_frame(frame, str(n[3]))
+    # TODO am/pm
+    return frame
+
+
 def main():
-    frame = xs_to_phases(BUFFER_1159)
+    frame = clock_frame()
     print_frame(frame)
-    next_frame = xs_to_phases(BUFFER_1200)
-    while frame != next_frame:
+    while True:
+        time.sleep(0.125)
+        next_frame = clock_frame()
         advance_frame(frame, next_frame)
         print_frame(frame)
-        time.sleep(0.125)
 
 
 if __name__ == "__main__":
