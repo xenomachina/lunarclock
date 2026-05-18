@@ -24,7 +24,7 @@ PHASES = "🌕🌖🌗🌘🌑🌒🌓🌔"
 BITS_TO_PHASE_INDEX = [0, 2, 6, 4]
 
 
-def clear_screen():
+def clear_screen() -> None:
     CONSOLE.clear()
 
 def xs_to_phases(xs: list[str]) -> list[list[int]]:
@@ -168,12 +168,12 @@ FONT = {
     }.items()
 }
 
-def print_frame(frame):
+def print_frame(frame: list[list[int]]) -> None:
     clear_screen()
     for line in frame:
         print("".join(PHASES[i] for i in line))
 
-def advance_frame(frame, next_frame):
+def advance_frame(frame: list[list[int]], next_frame: list[list[int]]) -> None:
     n = len(PHASES)
     for i in range(len(frame)):
         for j in range(len(frame[i])):
@@ -185,12 +185,12 @@ def now() -> str:
     t = datetime.datetime.now()
     return t.strftime("%I%M%S") + ("p" if t.hour >= 12 else "a")
 
-def render_char_to_frame(frame, c):
+def render_char_to_frame(frame: list[list[int]], c: str) -> None:
     glyph = FONT[c]
     for i in range(len(frame)):
         frame[i] += glyph[i]
 
-def clock_frame():
+def clock_frame() -> list[list[int]]:
     n = now()
     frame = [[] for x in range(len(FONT[' ']))]
     render_char_to_frame(frame, '|' if n[0] == '1' else ' ')
@@ -212,7 +212,7 @@ def clock_frame():
     return frame
 
 
-def main():
+def main() -> None:
     frame = clock_frame()
     print_frame(frame)
     while True:
