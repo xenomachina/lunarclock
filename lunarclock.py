@@ -192,7 +192,7 @@ def render_char_to_frame(frame: list[list[int]], c: str) -> None:
 
 def clock_frame() -> list[list[int]]:
     n = now()
-    frame = [[] for x in range(len(FONT[' ']))]
+    frame: list[list[int]] = [[] for x in range(len(FONT[' ']))]
     render_char_to_frame(frame, '|' if n[0] == '1' else ' ')
     render_char_to_frame(frame, str(n[1]))
     render_char_to_frame(frame, ':')
@@ -202,7 +202,7 @@ def clock_frame() -> list[list[int]]:
     render_char_to_frame(frame, str(n[4]))
     render_char_to_frame(frame, str(n[5]))
 
-    ampm = [[] for x in range(len(FONT['a']))]
+    ampm: list[list[int]] = [[] for x in range(len(FONT['a']))]
     render_char_to_frame(ampm, 'a' if n[-1] == 'a' else 'p')
 
     padding = [0] * (len(frame[0]) - len(ampm[0]))

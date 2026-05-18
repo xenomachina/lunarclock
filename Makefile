@@ -12,7 +12,7 @@ WITH_DEPS := $(shell sed -n '/^\# dependencies = \[/,/^\# \]/p' $(SCRIPT) | grep
 all: lint format mypy
 
 mypy:
-	uvx $(WITH_DEPS) mypy .
+	uvx $(WITH_DEPS) mypy --disallow-untyped-defs .
 
 format:
 	uvx ruff format $(FORMAT_FLAGS) .
