@@ -5,7 +5,7 @@ of
 [Froyo☆Tam](https://bsky.app/profile/froyotam.bsky.social/post/3mm45hoc4w22k).
 
 
-[Screen recording](raw/refs/heads/main/recording.mp4)
+<video src="https://github.com/xenomachina/lunarclock/raw/refs/heads/main/recording.mp4" controls></video>
 
 ## Running
 
